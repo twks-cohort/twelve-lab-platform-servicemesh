@@ -21,4 +21,12 @@ provider "aws" {
     role_arn     = "arn:aws:iam::${var.aws_account_id}:role/${var.aws_assume_role}"
     session_name = "twelve-lab-platform-servicemesh"
   }
+
+  default_tags {
+    tags = {
+      env      = var.cluster_name
+      cluster  = var.cluster_name
+      pipeline = "twelve-lab-platform-servicemesh"
+    }
+  }
 }

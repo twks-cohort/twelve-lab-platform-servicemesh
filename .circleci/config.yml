@@ -192,55 +192,55 @@ jobs:
           cluster: << parameters.cluster >>
 
   # update multi-cluster dashboard. Only needs to deploy once for many envs.
-  update-dashboard:
-    parameters:
-      shell:
-        description: shell options
-        type: string
-        default: /bin/bash -eo pipefail
-    docker:
-      - image: << pipeline.parameters.executor-image >>
-    shell: << parameters.shell >>
-    steps:
-      - checkout
-      - setup_remote_docker
-      - set-environment:
-          cluster: sandbox-ap-southeast-2
-          source-env: op.nonprod.env
-      - run:
-          name: install requirements
-          command: pip install -r requirements.txt
-      - run:
-          name: update datadog eks-base dashboard
-          command: bash scripts/deploy_dashboard.sh
+  # update-dashboard:
+  #   parameters:
+  #     shell:
+  #       description: shell options
+  #       type: string
+  #       default: /bin/bash -eo pipefail
+  #   docker:
+  #     - image: << pipeline.parameters.executor-image >>
+  #   shell: << parameters.shell >>
+  #   steps:
+  #     - checkout
+  #     - setup_remote_docker
+  #     - set-environment:
+  #         cluster: sandbox-ap-southeast-2
+  #         source-env: op.nonprod.env
+  #     - run:
+  #         name: install requirements
+  #         command: pip install -r requirements.txt
+  #     - run:
+  #         name: update datadog eks-base dashboard
+  #         command: bash scripts/deploy_dashboard.sh
 
-  update-monitors:
-    parameters:
-      cluster:
-        description: cluster monitors to update
-        type: string
-      shell:
-        description: shell option directive
-        type: string
-        default: /bin/bash -eo pipefail
-      source-env:
-        description: .env file to source into BASH_ENV
-        type: string
-    docker:
-      - image: << pipeline.parameters.executor-image >>
-    shell: << parameters.shell >>
-    steps:
-      - checkout
-      - setup_remote_docker
-      - set-environment:
-          cluster: << parameters.cluster >>
-          source-env: << parameters.source-env >>
-      - run:
-          name: install requirements
-          command: pip install -r requirements.txt
-      - run:
-          name: update datadog cluster monitors
-          command: python scripts/deploy_monitors.py << parameters.cluster >> $(cat << parameters.cluster >>.auto.tfvars.json | jq -r .alert_channel)
+  # update-monitors:
+  #   parameters:
+  #     cluster:
+  #       description: cluster monitors to update
+  #       type: string
+  #     shell:
+  #       description: shell option directive
+  #       type: string
+  #       default: /bin/bash -eo pipefail
+  #     source-env:
+  #       description: .env file to source into BASH_ENV
+  #       type: string
+  #   docker:
+  #     - image: << pipeline.parameters.executor-image >>
+  #   shell: << parameters.shell >>
+  #   steps:
+  #     - checkout
+  #     - setup_remote_docker
+  #     - set-environment:
+  #         cluster: << parameters.cluster >>
+  #         source-env: << parameters.source-env >>
+  #     - run:
+  #         name: install requirements
+  #         command: pip install -r requirements.txt
+  #     - run:
+  #         name: update datadog cluster monitors
+  #         command: python scripts/deploy_monitors.py << parameters.cluster >> $(cat << parameters.cluster >>.auto.tfvars.json | jq -r .alert_channel)
 
 workflows:
   version: 2
@@ -268,23 +268,23 @@ workflows:
             - deploy service account roles for sandbox-ap-southeast-2 cluster
           filters: *on-push-main
 
-  deploy servicemesh monitors:
-    jobs:
-      - update-monitors:
-          name: update sandbox-ap-southeast-2 monitors
-          context: << pipeline.parameters.context >>
-          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
-          source-env: op.nonprod.env
-          cluster: sandbox-ap-southeast-2
-          filters: *on-push-main
+  # deploy servicemesh monitors:
+  #   jobs:
+  #     - update-monitors:
+  #         name: update sandbox-ap-southeast-2 monitors
+  #         context: << pipeline.parameters.context >>
+  #         shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
+  #         source-env: op.nonprod.env
+  #         cluster: sandbox-ap-southeast-2
+  #         filters: *on-push-main
 
-  deploy servicemesh dashboard:
-    jobs:
-      - update-dashboard:
-          name: update sandbox-ap-southeast-2 dashboard
-          context: << pipeline.parameters.context >>
-          shell: op run --env-file=op.nonprod.env -- /bin/bash -eo pipefail
-          filters: *on-push-main
+  # deploy servicemesh dashboard:
+  #   jobs:
+  #     - update-dashboard:
+  #         name: update sandbox-ap-southeast-2 dashboard
+  #         context: << pipeline.parameters.context >>
+  #         shell: op run --env-file=op.nonprod.env -- /bin/bash -eo pipefail
+  #         filters: *on-push-main
 
   nightly-validation:
     triggers:
@@ -301,7 +301,7 @@ workflows:
           shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           source-env: op.nonprod.env
           cluster: sandbox-ap-southeast-2
-      - update-dashboard:
-          name: refresh eks-servicemesh dashboard
-          context: << pipeline.parameters.context >>
-          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
+      # - update-dashboard:
+      #     name: refresh eks-servicemesh dashboard
+      #     context: << pipeline.parameters.context >>
+      #     shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
