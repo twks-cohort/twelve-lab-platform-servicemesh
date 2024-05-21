@@ -38,7 +38,6 @@ on-tag-main: &on-tag-main
     only: /.*/
 
 commands:
-
   set-environment:
     parameters:
       cluster:
@@ -102,7 +101,7 @@ commands:
         default: $CLUSTER
     steps:
       - run:
-          name: deploy istio-access-logs 
+          name: deploy istio-access-logs
           command: bash scripts/deploy_istio_access_logs.sh << parameters.cluster >>
       - run:
           name: deploy istio-prometheus
@@ -209,7 +208,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - set-environment:
-          cluster: sandbox-us-east-2
+          cluster: sandbox-ap-southeast-2
           source-env: op.nonprod.env
       - run:
           name: install requirements
@@ -249,27 +248,27 @@ jobs:
 workflows:
   version: 2
 
-  deploy servicemesh to sandbox-us-east-2:
+  deploy servicemesh to sandbox-ap-southeast-2:
     jobs:
       - terraform/apply:
-          name: deploy service account roles for sandbox-us-east-2 cluster
+          name: deploy service account roles for sandbox-ap-southeast-2 cluster
           context: << pipeline.parameters.context >>
           shell: op run --env-file=op.nonprod.env -- /bin/bash -eo pipefail
-          workspace: sandbox-us-east-2
+          workspace: sandbox-ap-southeast-2
           before-terraform:
             - set-environment:
-                cluster: sandbox-us-east-2
+                cluster: sandbox-ap-southeast-2
                 source-env: op.nonprod.env
           filters: *on-push-main
 
       - deploy-servicemesh:
-          name: deploy sandbox-us-east-2 servicemesh
+          name: deploy sandbox-ap-southeast-2 servicemesh
           context: << pipeline.parameters.context >>
           shell: op run --env-file=op.nonprod.env -- /bin/bash -eo pipefail
           source-env: op.nonprod.env
-          cluster: sandbox-us-east-2
+          cluster: sandbox-ap-southeast-2
           requires:
-            - deploy service account roles for sandbox-us-east-2 cluster
+            - deploy service account roles for sandbox-ap-southeast-2 cluster
           filters: *on-push-main
 
   release servicemesh to prod-us-east-1:
@@ -277,7 +276,7 @@ workflows:
       - terraform/apply:
           name: deploy service account roles for prod-us-east-1
           context: << pipeline.parameters.context >>
-          shell:  op run --env-file=op.prod.env -- /bin/bash -eo pipefail
+          shell: op run --env-file=op.prod.env -- /bin/bash -eo pipefail
           workspace: prod-us-east-1
           before-terraform:
             - set-environment:
@@ -288,7 +287,7 @@ workflows:
       - deploy-servicemesh:
           name: release prod-us-east-1 servicemesh
           context: << pipeline.parameters.context >>
-          shell:  op run --env-file=op.prod.env -- /bin/bash -eo pipefail
+          shell: op run --env-file=op.prod.env -- /bin/bash -eo pipefail
           source-env: op.prod.env
           cluster: prod-us-east-1
           requires:
@@ -298,23 +297,23 @@ workflows:
   deploy servicemesh monitors:
     jobs:
       - update-monitors:
-          name: update sandbox-us-east-2 monitors
+          name: update sandbox-ap-southeast-2 monitors
           context: << pipeline.parameters.context >>
-          shell:  op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
+          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           source-env: op.nonprod.env
-          cluster: sandbox-us-east-2
+          cluster: sandbox-ap-southeast-2
           filters: *on-push-main
 
       - approve prod-us-east-1 monitors release:
           type: approval
           requires:
-            - update sandbox-us-east-2 monitors
+            - update sandbox-ap-southeast-2 monitors
           filters: *on-push-main
 
       - update-monitors:
           name: update prod-us-east-1 monitors
           context: << pipeline.parameters.context >>
-          shell:  op run --env-file op.prod.env -- /bin/bash -eo pipefail
+          shell: op run --env-file op.prod.env -- /bin/bash -eo pipefail
           source-env: op.prod.env
           cluster: prod-us-east-1
           requires:
@@ -324,7 +323,7 @@ workflows:
   deploy servicemesh dashboard:
     jobs:
       - update-dashboard:
-          name: update sandbox-us-east-2 dashboard
+          name: update sandbox-ap-southeast-2 dashboard
           context: << pipeline.parameters.context >>
           shell: op run --env-file=op.nonprod.env -- /bin/bash -eo pipefail
           filters: *on-push-main
@@ -339,18 +338,18 @@ workflows:
                 - main
     jobs:
       - validate-servicemesh:
-          name: validate sandbox-us-east-2 servicemesh
+          name: validate sandbox-ap-southeast-2 servicemesh
           context: << pipeline.parameters.context >>
-          shell:  op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
+          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           source-env: op.nonprod.env
-          cluster: sandbox-us-east-2
+          cluster: sandbox-ap-southeast-2
       - validate-servicemesh:
           name: validate prod-us-east-1 servicemesh
           context: << pipeline.parameters.context >>
-          shell:  op run --env-file op.prod.env -- /bin/bash -eo pipefail
+          shell: op run --env-file op.prod.env -- /bin/bash -eo pipefail
           source-env: op.prod.env
           cluster: prod-us-east-1
       - update-dashboard:
           name: refresh eks-servicemesh dashboard
           context: << pipeline.parameters.context >>
-          shell:  op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
+          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail

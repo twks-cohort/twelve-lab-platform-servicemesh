@@ -12,14 +12,14 @@ function version_alert() {
 }
 
 # current versions table
-export TABLE="| dependency | sandbox-us-east-2 | prod-us-east-1 |\\\\n|----|----|----|\\\\n"
+export TABLE="| dependency | sandbox-ap-southeast-2 | prod-us-east-1 |\\\\n|----|----|----|\\\\n"
 export ISTIO_VERSIONS="| istio revision |"
 export EXTERNAL_DNS_VERSIONS="| external-dns |"
 export CERT_MANAGER_VERSIONS="| cert-manager* |"
 export KIALI_VERSIONS="| kiali* |"
 
 echo "generate markdown table with the desired versions of the services managed by the lab-platform-servicemesh pipeline for all clusters"
-declare -a clusters=(sandbox-us-east-2 prod-us-east-1)
+declare -a clusters=(sandbox-ap-southeast-2 prod-us-east-1)
 
 for cluster in "${clusters[@]}";
 do

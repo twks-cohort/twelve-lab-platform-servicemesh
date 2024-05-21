@@ -6,8 +6,8 @@
 
   "cluster_domains": [
     "twdps.digital",
-    "sandbox-us-east-2.twdps.digital",
-    "sandbox-us-east-2.twdps.io",
+    "sandbox-ap-southeast-2.twdps.digital",
+    "sandbox-ap-southeast-2.twdps.io",
     "preview.twdps.digital",
     "preview.twdps.io"
   ],

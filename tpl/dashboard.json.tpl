@@ -1,6 +1,6 @@
 {
-  "title": "EMPC lab-platform-eks-servicemesh",
-  "description": "[lab-platform-eks-core-services](https://github.com/ThoughtWorks-DPS/lab-platform-eks-servicemesh)",
+  "title": "EMPC twelve-lab-platform-eks-servicemesh",
+  "description": "[lab-platform-eks-core-services](https://github.com/ThoughtWorks-DPS/twelve-lab-platform-eks-servicemesh)",
   "widgets": [
     {
       "definition": {
@@ -889,7 +889,7 @@
       "default": "prod-us-east-1",
       "prefix": "cluster",
       "available_values": [
-        "sandbox-us-east-2",
+        "sandbox-ap-southeast-2",
         "prod-us-east-1"
       ]
     },
