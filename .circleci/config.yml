@@ -3,7 +3,7 @@ version: 2.1
 
 orbs:
   terraform: twdps/terraform@0.6.0
-  kube: twdps/kube-ops@0.3.0
+  kube: twdps/kube-ops@0.2.0
   op: twdps/onepassword@1.0.0
   do: twdps/pipeline-events@0.1.0
 
@@ -21,7 +21,7 @@ parameters:
   executor-image:
     description: image to use for local jobs
     type: string
-    default: twdps/circleci-kube-ops:alpine-edge
+    default: twdps/circleci-kube-ops:alpine-1.8.0
 
 # ==== triggers
 
