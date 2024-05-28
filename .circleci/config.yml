@@ -68,7 +68,6 @@ commands:
         type: string
         default: $CLUSTER
     steps:
-      - do/circle-deploy
       - run:
           name: deploy istio operator and matching version manifest
           command: bash scripts/deploy_istio.sh << parameters.cluster >> inplace
