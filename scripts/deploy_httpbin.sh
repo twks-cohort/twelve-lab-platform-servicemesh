@@ -2,7 +2,7 @@
 
 export CLUSTER=$1
 
-cat <<EOF >httpbin-twdps-io-gateway.yaml
+cat <<EOF > httpbin-twdps-io-gateway.yaml
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService

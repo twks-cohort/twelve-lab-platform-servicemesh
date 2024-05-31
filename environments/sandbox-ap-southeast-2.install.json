@@ -5,11 +5,10 @@
   "kiali_version": "v1.56.1",
 
   "cluster_domains": [
-    "twdps.digital",
-    "sandbox-ap-southeast-2.twdps.digital",
-    "sandbox-ap-southeast-2.twdps.io",
-    "preview.twdps.digital",
-    "preview.twdps.io"
+    "cdicohorts-twelve.com",
+    "dev.cdicohorts-twelve.com",
+    "nonprod-ap-southeast-2.cdicohorts-twelve.com",
+    "qa.cdicohorts-twelve.com"
   ],
   "issuerEndpoint": "https://acme-v02.api.letsencrypt.org/directory",
   "issuerEmail": "twdps.io@gmail.com"
